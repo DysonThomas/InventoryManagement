@@ -296,7 +296,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 children: [
                                   if (!(widget.data['sold'] ?? false))
                                  ActionButtons(label: 'Sold', clr: Colors.green, onPressed:()=> _markAsSold(widget.data['skuNumber']),),
-                                  if((!widget.data['sold']??false)&&(!widget.data['isPending']??false&&(!widget.data['isListed']??false) ))//&&(widget.data['isListed']??false) this condtion can beused if  only listed ad need to hold
+                                  if((!widget.data['sold']??false)&&(!widget.data['isPending']??false)&&((!widget.data['isListed']??false) ))//&&(widget.data['isListed']??false) this condtion can beused if  only listed ad need to hold
                                  ActionButtons(label: 'Pending', clr: Colors.yellow, onPressed:()=> _markAsPending(widget.data['skuNumber']),),
                                   if((!widget.data['sold']??false)&&(widget.data['isPending']??false))
                                     ActionButtons(label: 'Back To Stock', clr: Colors.red, onPressed:()=> _markAsBackToStock(widget.data['skuNumber']),),
