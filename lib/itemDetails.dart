@@ -4,7 +4,6 @@ import 'package:inventorymanagement/Components/actionButton.dart';
 import 'package:inventorymanagement/Components/productDetailStatus.dart';
 import 'package:inventorymanagement/Components/productDetailsFeatures.dart';
 import 'package:inventorymanagement/homescreen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ItemDetails extends StatefulWidget {
   final Map data;
