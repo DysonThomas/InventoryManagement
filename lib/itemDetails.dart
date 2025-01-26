@@ -18,23 +18,23 @@ class _ItemDetailsState extends State<ItemDetails> {
   double earnedProfit=0;
   String formattedDate='';
   String formattedSoldDate='';
-  // DateTime dateReceived=DateTime.now();
+  DateTime dateReceivedD=DateTime.now();
   void initState() {
+
     super.initState();
-    expectedProfit = (widget.data['sellingPrice']??0)-(widget.data['cost']??0);
+    // print((widget.data['sold']??false));
+   // print(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false) ));//&&(widget.);    expectedProfit = (widget.data['sellingPrice'] ?? 0) - (widget.data['cost'] ?? 0);
     if (widget.data['ReceivingDate'] is Timestamp) {
       DateTime dateReceived = (widget.data['ReceivingDate'] as Timestamp).toDate();
       formattedDate = "${dateReceived.year}-${dateReceived.month}-${dateReceived.day}";
-    } else {
+    }
+    else {
       formattedDate = "N/A"; // Fallback if date is not available
-    }// Extracting just the date
-
-      if (widget.data['sold'] ?? false) {
-        DateTime dateSold = (widget.data['soldDate'] as Timestamp?)?.toDate() ?? DateTime.now();
-        formattedSoldDate = "${dateSold.year}-${dateSold.month}-${dateSold.day}";
-        earnedProfit = (widget.data['soldPrice'] ?? 0) - (widget.data['cost'] ?? 0);
-
-      // Extracting just the date
+    }
+    if (widget.data['sold'] ?? false) {
+      DateTime dateSold = (widget.data['soldDate'] as Timestamp?)?.toDate() ?? DateTime.now();
+      formattedSoldDate = "${dateSold.year}-${dateSold.month}-${dateSold.day}";
+      earnedProfit = (widget.data['soldPrice'] ?? 0) - (widget.data['cost'] ?? 0);
     }
   }
   _markAsSold(String data) async{
@@ -243,8 +243,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  FeaturesBox(label: 'Product Number', desc: widget.data['skuNumber']),
-                                  FeaturesBox(label: 'Quantity available', desc: widget.data['quantity'].toString())
+                                  FeaturesBox(label: 'Product Number', desc: (widget.data['skuNumber']??1).toString()),
+                                  FeaturesBox(label: 'Quantity available', desc: (widget.data['quantity']??1).toString())
                                 ],
                               ),
                               SizedBox(
@@ -253,8 +253,8 @@ class _ItemDetailsState extends State<ItemDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  FeaturesBox(label: 'Cost', desc: widget.data['cost'].toString()),
-                                    FeaturesBox(label: 'Selling Price', desc: widget.data['sellingPrice'].toString())
+                                  FeaturesBox(label: 'Cost', desc: (widget.data['cost']??20).toString()),
+                                    FeaturesBox(label: 'Selling Price', desc: (widget.data['sellingPrice']??20).toString())
                                 ],
                               ),
                               SizedBox(
@@ -263,7 +263,7 @@ class _ItemDetailsState extends State<ItemDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  FeaturesBox(label: 'Market Value', desc: widget.data[''].toString()),
+                                  FeaturesBox(label: 'Market Value', desc: (widget.data['marketPrice']??20).toString()),
                                   FeaturesBox(label: 'Profit Expected', desc:expectedProfit.toString())
                                 ],
                               ),
@@ -273,17 +273,17 @@ class _ItemDetailsState extends State<ItemDetails> {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: [
-                                  FeaturesBox(label: 'Received Date', desc: formattedDate),]
+                                  FeaturesBox(label: 'Received Date', desc: formattedDate.isEmpty ? 'N/A' : formattedDate),]
                               ),
                               SizedBox(
                                 height: 30,
                               ),
-                              // if(widget.data['sold']??false)
+                              if(widget.data['sold']??true)
                               Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    FeaturesBox(label: 'Sold Price', desc: widget.data[''].toString()),
-                                    FeaturesBox(label: 'Sold Date', desc: formattedSoldDate),
+                                    FeaturesBox(label: 'Sold Price', desc: (widget.data['SoldPrice']??00).toString()),
+                                    FeaturesBox(label: 'Sold Date', desc: formattedSoldDate.isEmpty ? 'N/A' : formattedSoldDate),
                                     FeaturesBox(label: 'Earned Profit',desc: earnedProfit.toString(),)
                                   ]
                               ),
@@ -295,19 +295,20 @@ class _ItemDetailsState extends State<ItemDetails> {
                                 children: [
                                   if (!(widget.data['sold'] ?? false))
                                  ActionButtons(label: 'Sold', clr: Colors.green, onPressed:()=> _markAsSold(widget.data['skuNumber']),),
-                                  if((!widget.data['sold']??false)&&(!widget.data['isPending']??false)&&((!widget.data['isListed']??false) ))//&&(widget.data['isListed']??false) this condtion can beused if  only listed ad need to hold
+                                  if(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false) ))//&&(widget.data['isListed']??false) this condtion can beused if  only listed ad need to hold
                                  ActionButtons(label: 'Pending', clr: Colors.yellow, onPressed:()=> _markAsPending(widget.data['skuNumber']),),
-                                  if((!widget.data['sold']??false)&&(widget.data['isPending']??false))
+                                  if(!(widget.data['sold']??false)&&((widget.data['isPending']??false)))
                                     ActionButtons(label: 'Back To Stock', clr: Colors.red, onPressed:()=> _markAsBackToStock(widget.data['skuNumber']),),
-                                  if((!widget.data['sold']??false)&&(!widget.data['isPending']??false)&&(!widget.data['isListed']??false) )
+                                  if(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false)) )
                                  ActionButtons(label: 'Ad Listed', clr: Colors.blue,onPressed:()=> _backToList(widget.data['skuNumber']),),
-                                  if((!widget.data['sold']??false)&&(!widget.data['isPending']??false)&&(widget.data['isListed']??false) )
+                                  if(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(widget.data['isListed']??false) )
                                   ActionButtons(label: 'UnListed', clr: Colors.red, onPressed:()=> _unList(widget.data['skuNumber']),),
                                   ActionButtons(label: 'Remove Product', clr: Colors.deepOrange, onPressed:()=> _remove(widget.data['skuNumber']),),
                   
                                 ],
                               ),
                             ],
+
                           ),
                         )
                     ],

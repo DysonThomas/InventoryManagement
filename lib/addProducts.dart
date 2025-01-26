@@ -6,31 +6,55 @@ import 'InputComponent.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 
-class ItemsMaster extends StatelessWidget {
+class ItemsMaster extends StatefulWidget {
   ItemsMaster({super.key});
+
+  @override
+  State<ItemsMaster> createState() => _ItemsMasterState();
+}
+
+class _ItemsMasterState extends State<ItemsMaster> {
   final TextEditingController _skunumber = TextEditingController();
+
   final TextEditingController _description = TextEditingController();
+
   final TextEditingController _location = TextEditingController();
+
   final TextEditingController _quantity = TextEditingController();
+
   final TextEditingController _receivingdate = TextEditingController();
+
   final TextEditingController _cost = TextEditingController();
+
   final TextEditingController _sellingprice = TextEditingController();
+
   final TextEditingController _category = TextEditingController();
-  final TextEditingController _isSold = TextEditingController();
-  final TextEditingController _ispending = TextEditingController();
+
+  final TextEditingController _marketPrice = TextEditingController();
+
   final TextEditingController _isListed = TextEditingController();
 
 String skunumber='';
-String description='';
-String category='';
-String location='';
-int quantity=0;
-double sellingprice=0.0;
-double cost=0.0;
-DateTime recDate = DateTime.now();
-bool isPending = false;
-bool isListed = false;
 
+String description='';
+
+String category='';
+
+String location='';
+
+int quantity=0;
+
+double sellingprice=0.0;
+
+double cost=0.0;
+
+double marketPrice=0.0;
+
+DateTime recDate = DateTime.now();
+
+bool isPending = false;
+
+bool isListed = false;
 
   void _saveItem(BuildContext context) async {
     if (_skunumber.text.isEmpty ||
@@ -57,10 +81,19 @@ bool isListed = false;
         'quantity': quantity,
         'sellingPrice': sellingprice,
         'cost': cost,
+        'marketPrice': marketPrice,
         'ReceivingDate': recDate,
-        'isPending': isPending,
-        'isListed': isListed,
+        'isPending': isPending??false,
+        'isListed': isListed??false,
+        'sold':false
       });
+    _skunumber.text='';
+    _description.text ='';
+    _location.text ='';
+    _quantity.text ='';
+    _cost.text='';
+    _sellingprice.text='';
+    _category.text='';
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('Item added successfully!'),
@@ -81,8 +114,6 @@ bool isListed = false;
     }
     }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,7 +128,7 @@ bool isListed = false;
         padding: const EdgeInsets.only(left: 8,right: 8),
         child: SingleChildScrollView(
           child: Column(
-          
+
             children: <Widget>[
               InputFieldss(textLabel: 'Enter Product Number',
                   hintText: 'N25', controller: _skunumber,
@@ -134,9 +165,18 @@ bool isListed = false;
                 hintText: 'Enter Receiving Date',
                 controller: _receivingdate,
                 onChanged: (date) {
-                  recDate = date; // Handle receiving date change
-                  recDate=recDate; // Verify date
+                  setState(() {
+                    // Format the date to a string in the desired format
+                    String formattedDate = "${date.year}-${date.month.toString().padLeft(2, '0')}-${date.day.toString().padLeft(2, '0')}";
+
+                    // Update the TextEditingController's text with the formatted date
+                    _receivingdate.value = TextEditingValue(text: formattedDate);
+
+                    // Also update recDate to the selected date
+                    recDate = date;
+                  });
                 },
+
               ),
               InputFieldss(
                 textLabel: 'Cost',
@@ -144,6 +184,14 @@ bool isListed = false;
                 controller: _cost,
                 onChanged: (value) {
                   cost=double.parse(value);
+                },
+              ),
+              InputFieldss(
+                textLabel: 'Market Price',
+                hintText: 'Estimated Price',
+                controller: _marketPrice,
+                onChanged: (value) {
+                  marketPrice=double.parse(value);
                 },
               ),
               InputFieldss(
@@ -166,8 +214,8 @@ bool isListed = false;
                   Boolwidget(textLabel: 'Is Listed', hintText: 'Choose Yes Or No',
                       controller: _isListed, onChanged: (value){;
                     isListed=value;}),
-                  Boolwidget(textLabel: 'Is Pending', hintText: 'Choose Yes Or No',
-                      controller: _ispending, onChanged: (value){isPending=value;}),
+                  // Boolwidget(textLabel: 'Is Pending', hintText: 'Choose Yes Or No',
+                  //     controller: _ispending, onChanged: (value){isPending=value;}),
                 //   Boolwidget(textLabel: 'Is Sold', hintText: 'Choose Yes Or No',
                 //       controller: _isSold, onChanged: (value){isSold=value;}),
                 // DateWidget(

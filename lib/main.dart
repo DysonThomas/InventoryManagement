@@ -19,6 +19,10 @@ class _MtAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: 'Roboto',
+      ),
+      debugShowCheckedModeBanner: false,
       home: LandingScreen(),
     );
   }

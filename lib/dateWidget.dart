@@ -20,7 +20,12 @@ class _DateWidgetState extends State<DateWidget> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2050),
     );
-    widget.onChanged(selectedDate);
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked; // Update selectedDate with the picked date
+      });
+      widget.onChanged(selectedDate); // Pass the selected date to the parent
+    }
   }
   @override
   Widget build(BuildContext context) {
