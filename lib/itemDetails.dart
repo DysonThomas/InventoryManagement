@@ -22,6 +22,8 @@ class _ItemDetailsState extends State<ItemDetails> {
   void initState() {
 
     super.initState();
+
+
     // print((widget.data['sold']??false));
    // print(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false) ));//&&(widget.);    expectedProfit = (widget.data['sellingPrice'] ?? 0) - (widget.data['cost'] ?? 0);
     if (widget.data['ReceivingDate'] is Timestamp) {
@@ -122,7 +124,12 @@ class _ItemDetailsState extends State<ItemDetails> {
           'isListed':true,
         };
         await docRef.update(updatedData);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LandingScreen()),
+              (Route<dynamic> route) => false,
+        );
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
 
       } else {
         print("No product found with skuNumber");
@@ -143,7 +150,13 @@ class _ItemDetailsState extends State<ItemDetails> {
           'isListed':false,
         };
         await docRef.update(updatedData);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        await docRef.update(updatedData);
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LandingScreen()),
+              (Route<dynamic> route) => false,
+        );
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
       } else {
         print("No product found with skuNumber");
       }
@@ -166,7 +179,12 @@ class _ItemDetailsState extends State<ItemDetails> {
 
         // Delete the document
         await docRef.delete();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LandingScreen()),
+              (Route<dynamic> route) => false,
+        );
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
       } else {
         print("No product found with skuNumber.");
       }

@@ -117,7 +117,14 @@ bool isListed = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading:       IconButton(onPressed: (){ Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen())); }, icon: Icon(Icons.arrow_back),),
+      appBar: AppBar(leading:       IconButton(onPressed: (){
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => LandingScreen()),
+              (Route<dynamic> route) => false,
+        );
+        // Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
+        }, icon: Icon(Icons.arrow_back),),
         title: Text('Add Product'),
         centerTitle: true,
         actions: [

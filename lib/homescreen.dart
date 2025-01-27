@@ -55,7 +55,12 @@ class _LandingScreenState extends State<LandingScreen> {
               width: screenWidth,
               child: GestureDetector(
                 onTap:(){
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(data:product)));
+                  Navigator.pushAndRemoveUntil(
+                    context,
+                    MaterialPageRoute(builder: (context) => ItemDetails(data: product)),
+                        (Route<dynamic> route) => false,
+                  );
+                  // Navigator.push(context, MaterialPageRoute(builder: (context) => ItemDetails(data:product)));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -143,7 +148,12 @@ class _LandingScreenState extends State<LandingScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) => ItemsMaster()));
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ItemsMaster()),
+                (Route<dynamic> route) => false,
+          );
+          // Navigator.push(context, MaterialPageRoute(builder: (context) => ItemsMaster()));
         },
         child: Icon(Icons.add,color: Colors.white70), // Icon displayed on the button
         backgroundColor: Colors.teal[700],
