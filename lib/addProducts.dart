@@ -55,69 +55,77 @@ DateTime recDate = DateTime.now();
 bool isPending = false;
 
 bool isListed = false;
-
+  Future<bool> isUnique(String sku) async{
+    QuerySnapshot snapshot= await await FirebaseFirestore.instance.collection('products')
+        .where('sku', isEqualTo: sku)
+        .get();
+    return snapshot.docs.isEmpty;
+  }
   void _saveItem(BuildContext context) async {
-    if (_skunumber.text.isEmpty ||
-        _description.text.isEmpty ||
-        _location.text.isEmpty ||
-        _quantity.text.isEmpty ||
-        _cost.text.isEmpty ||
-        _sellingprice.text.isEmpty ||
-        _category.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Please fill in all fields'),
-          backgroundColor: Colors.red,
-        ),
-      );
-      return; // Stop further execution if validation fails
-    }
+    bool unique = await isUnique(_skunumber.text);
+    if(unique) {
+      if (_skunumber.text.isEmpty ||
+          _description.text.isEmpty ||
+          _location.text.isEmpty ||
+          _quantity.text.isEmpty ||
+          _cost.text.isEmpty ||
+          _sellingprice.text.isEmpty ||
+          _category.text.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Please fill in all fields'),
+            backgroundColor: Colors.red,
+          ),
+        );
+        return; // Stop further execution if validation fails
+      }
 
-    try {
-    await FirebaseFirestore.instance.collection('itemMaster').add({
-        'skuNumber': skunumber,
-        'productDesc': description,
-        'category': category,
-        'quantity': quantity,
-        'sellingPrice': sellingprice,
-        'cost': cost,
-        'marketPrice': marketPrice,
-        'ReceivingDate': recDate,
-        'isPending': isPending??false,
-        'isListed': isListed??false,
-        'sold':false
-      });
-    _skunumber.text='';
-    _description.text ='';
-    _location.text ='';
-    _quantity.text ='';
-    _cost.text='';
-    _sellingprice.text='';
-    _category.text='';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Item added successfully!'),
-        backgroundColor: Colors.green,
-      ),
-    );
-    }
-    catch(e){
-      // Handle the error and display a message
-      print("Error saving item: $e");
+      try {
+        await FirebaseFirestore.instance.collection('itemMaster').add({
+          'skuNumber': skunumber,
+          'productDesc': description,
+          'category': category,
+          'quantity': quantity,
+          'sellingPrice': sellingprice,
+          'cost': cost,
+          'marketPrice': marketPrice,
+          'ReceivingDate': recDate,
+          'isPending': isPending ?? false,
+          'isListed': isListed ?? false,
+          'sold': false
+        });
+        _skunumber.text = '';
+        _description.text = '';
+        _location.text = '';
+        _quantity.text = '';
+        _cost.text = '';
+        _sellingprice.text = '';
+        _category.text = '';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Item added successfully!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+      catch (e) {
+        // Handle the error and display a message
+        print("Error saving item: $e");
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Failed to add item. Please try again.'),
-          backgroundColor: Colors.red,
-        ),
-      );
-    }
-    }
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to add item. Please try again.'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(leading:       IconButton(onPressed: (){
+      appBar: AppBar(
+        leading:IconButton(onPressed: (){
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => LandingScreen()),
@@ -137,7 +145,7 @@ bool isListed = false;
           child: Column(
 
             children: <Widget>[
-              InputFieldss(textLabel: 'Enter Product Number',
+              InputFieldss(textLabel: 'Enter Unique Product Number',
                   hintText: 'N25', controller: _skunumber,
                   onChanged: (value){
 

@@ -25,7 +25,8 @@ class _ItemDetailsState extends State<ItemDetails> {
 
 
     // print((widget.data['sold']??false));
-   // print(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false) ));//&&(widget.);    expectedProfit = (widget.data['sellingPrice'] ?? 0) - (widget.data['cost'] ?? 0);
+   // print(!(widget.data['sold']??false)&&(!(widget.data['isPending']??false))&&(!(widget.data['isListed']??false) ));//&&(widget.);
+    expectedProfit = (widget.data['sellingPrice'] ?? 0) - (widget.data['cost'] ?? 0);
     if (widget.data['ReceivingDate'] is Timestamp) {
       DateTime dateReceived = (widget.data['ReceivingDate'] as Timestamp).toDate();
       formattedDate = "${dateReceived.year}-${dateReceived.month}-${dateReceived.day}";
@@ -37,24 +38,39 @@ class _ItemDetailsState extends State<ItemDetails> {
       DateTime dateSold = (widget.data['soldDate'] as Timestamp?)?.toDate() ?? DateTime.now();
       formattedSoldDate = "${dateSold.year}-${dateSold.month}-${dateSold.day}";
       earnedProfit = (widget.data['soldPrice'] ?? 0) - (widget.data['cost'] ?? 0);
+
     }
   }
   _markAsSold(String data) async{
     try{
       CollectionReference product = FirebaseFirestore.instance.collection('itemMaster');
       QuerySnapshot querySnapshot = await product.where('skuNumber', isEqualTo: data.toString()).get();
-     print(querySnapshot);
       if (querySnapshot.docs.isNotEmpty) {
-        DocumentReference docRef = querySnapshot.docs.first.reference;
-        Map<String, dynamic> updatedData = {
-          'sold': true,     // Set 'sold' to true
-          'isPending': false,
-          'isListed':false,
-          'soldDate':DateTime.now()
-        };
-        await docRef.update(updatedData);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => LandingScreen()));
-
+        if(widget.data['quantity']>1) {
+          DocumentReference docRef = querySnapshot.docs.first.reference;
+          Map<String, dynamic> updatedData = {
+            'sold': false, // Set 'sold' to true
+            'isPending': false,
+            'isListed': false,
+            'quantity':widget.data['quantity']-1,
+            'soldDate': DateTime.now()
+          };
+          await docRef.update(updatedData);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LandingScreen()));
+        }
+        else{
+          DocumentReference docRef = querySnapshot.docs.first.reference;
+          Map<String, dynamic> updatedData = {
+            'sold': true, // Set 'sold' to true
+            'isPending': false,
+            'isListed': false,
+            'soldDate': DateTime.now()
+          };
+          await docRef.update(updatedData);
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => LandingScreen()));
+        }
       } else {
         print("No product found with skuNumber");
       }
