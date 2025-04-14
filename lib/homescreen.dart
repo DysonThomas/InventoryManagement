@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:inventorymanagement/Components/Empdrawer.dart';
 import 'package:inventorymanagement/addProducts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:inventorymanagement/addUsers.dart';
@@ -22,33 +23,7 @@ class _LandingScreenState extends State<LandingScreen> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-      drawer: Drawer(
-        child: ListView(
-          children: [
-  Container(
-          height: 80, // Adjust height as needed
-      color: Colors.teal[700],
-      alignment: Alignment.centerLeft,
-      padding: EdgeInsets.all(16),
-      child: Text(
-        "Master Liqudation",
-        style: TextStyle(color: Colors.white, fontSize: 20),
-      ),
-    ),
-            ListTile(
-              leading: Icon(Icons.add_circle_rounded),
-              title: Text("Add Employee"),
-              onTap: () {
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(builder: (context) => addUsers()),
-                      (Route<dynamic> route) => false,
-                );
-              },
-            ),
-       ],
-        ),
-      ),
+      drawer: MyDrawer(),
       appBar: AppBar(
         title: Text('Product List',style: TextStyle(color: Colors.white),
         ),

@@ -51,7 +51,7 @@ class _ItemDetailsState extends State<ItemDetails> {
           Map<String, dynamic> updatedData = {
             'sold': false, // Set 'sold' to true
             'isPending': false,
-            'isListed': false,
+            'isListed': true,
             'quantity':widget.data['quantity']-1,
             'soldDate': DateTime.now()
           };

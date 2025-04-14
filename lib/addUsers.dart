@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:inventorymanagement/InputComponent.dart';
 import 'package:inventorymanagement/boolwidget.dart';
+import 'package:inventorymanagement/homescreen.dart';
 
 class addUsers extends StatefulWidget {
   const addUsers({super.key});
@@ -124,19 +125,48 @@ class _addUsersState extends State<addUsers> {
             role=value;
             print(role);
             }),
-              ElevatedButton(
-                onPressed: () {
-                  _saveUser(context);
-                },
-                child: Text(
-                  'Save',
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue[900], // Dark blue background
-                  padding: EdgeInsets.symmetric(vertical: 16), // Increases height
-                  textStyle: TextStyle(fontWeight: FontWeight.bold),
-                ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment:MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () {
+                      _saveUser(context);
+                    },
+                    child: Text(
+                      'Save',
+                      style: TextStyle(color: Colors.white70, fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[900], // Dark blue background
+                      padding: EdgeInsets.symmetric(vertical: 16), // Increases height
+                      textStyle: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(builder: (context) => LandingScreen()),
+                            (Route<dynamic> route) => false,
+                      );
+                    },
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(color: Colors.white70, fontSize: 16),
+                    ),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue[900], // Dark blue background
+                      padding: EdgeInsets.symmetric(vertical: 16), // Increases height
+                      textStyle: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

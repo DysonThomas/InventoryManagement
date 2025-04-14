@@ -56,7 +56,7 @@ bool isPending = false;
 
 bool isListed = false;
   Future<bool> isUnique(String sku) async{
-    QuerySnapshot snapshot= await await FirebaseFirestore.instance.collection('products')
+    QuerySnapshot snapshot= await FirebaseFirestore.instance.collection('products')
         .where('sku', isEqualTo: sku)
         .get();
     return snapshot.docs.isEmpty;
@@ -109,7 +109,7 @@ bool isListed = false;
         );
       }
       catch (e) {
-        // Handle the error and display a message
+
         print("Error saving item: $e");
 
         ScaffoldMessenger.of(context).showSnackBar(
